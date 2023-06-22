@@ -1,20 +1,9 @@
 import streamlit as st
-import importlib
-
-# Attempt to import plotly
-try:
-    importlib.import_module('plotly')
-    plotly_installed = True
-except ImportError:
-    plotly_installed = False
-
-# Install plotly if not already installed
-if not plotly_installed:
-    import subprocess
-    subprocess.check_call(['pip', 'install', 'plotly'])
 import plotly.express as px
 import pandas as pd
 import numpy as np
+import zipfile
+import io
 
 
 # run the app with: streamlit run final_vis.py
@@ -35,7 +24,11 @@ st.subheader("Total Crime Records Each Year")
 st.line_chart(sum_by_year[sum_by_year.index != 2023])
 
 
-crimes_det = pd.read_csv("./data/cr_r_q_ft.csv", index_col=0)
+with zipfile.ZipFile("./data/cr_r_q_ft.csv.zip", 'r') as zip_ref:
+    csv = zip_ref.read('cr_r_q_ft.csv')
+    crimes_det = pd.read_csv(io.BytesIO(csv), index_col=0)
+
+print(crimes_det.head())
 felony_type = crimes_det['StatisticCrimeGroup'].value_counts(normalize=True).sort_values(ascending=False)
 
 # pie chart for felony type
