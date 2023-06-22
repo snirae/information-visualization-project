@@ -1,9 +1,13 @@
 import streamlit as st
 import pandas as pd
+import numpy as np
 
 
 crimes_sum = pd.read_csv("./data/sum_cr_r_q.csv")
-crimes_sum["year"] = crimes_sum['Quarter'].apply(lambda x: int(x.split("-")[0]))
+print(crimes_sum.head(10))
+
+crimes_sum["year"] = crimes_sum['Quarter'].apply(lambda x: int(str(x).split("-")[0]) if not pd.isna(x) else x)
+print(crimes_sum["year"].head(10))
 
 st.header("Crime Records Visualization")
 
