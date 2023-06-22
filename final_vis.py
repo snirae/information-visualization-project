@@ -1,4 +1,17 @@
 import streamlit as st
+import importlib
+
+# Attempt to import plotly
+try:
+    importlib.import_module('plotly')
+    plotly_installed = True
+except ImportError:
+    plotly_installed = False
+
+# Install plotly if not already installed
+if not plotly_installed:
+    import subprocess
+    subprocess.check_call(['pip', 'install', 'plotly'])
 import plotly.express as px
 import pandas as pd
 import numpy as np
