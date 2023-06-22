@@ -15,6 +15,6 @@ st.write("This is a web app to visualize crime records in Israel.")
 
 # line plot for total TikimSum in each year, x axis is year, y axis is TikimSum
 st.subheader("Total Crime Records Each Year")
-st.line_chart(sum_by_year)
+st.line_chart(sum_by_year[sum_by_year.index != 2023])
 
 # run the app with: streamlit run final_vis.py
