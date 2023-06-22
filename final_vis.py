@@ -11,10 +11,10 @@ print(crimes_sum["year"].head(10))
 
 st.header("Crime Records Visualization")
 
-st.write("This is a web app to visualize crime records in the US.")
+st.write("This is a web app to visualize crime records in Israel.")
 
-# line plot for total crime records each year
+# line plot for total TikimSum in each year
 st.subheader("Total Crime Records Each Year")
-st.line_chart(crimes_sum.groupby("year").size())
+st.line_chart(crimes_sum.groupby("year").sum()["TikimSum"])
 
 # run the app with: streamlit run final_vis.py
