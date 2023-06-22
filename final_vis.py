@@ -30,6 +30,9 @@ with zipfile.ZipFile("./data/cr_r_q_ft.csv.zip", 'r') as zip_ref:
 
 print(crimes_det.head())
 felony_type = crimes_det['StatisticCrimeGroup'].value_counts(normalize=True).sort_values(ascending=False)
+# combine all types with less than 5% into "other"
+felony_type = felony_type[0:5]
+felony_type['Other'] = 1 - felony_type.sum()
 
 # pie chart for felony type
 st.subheader("Felony Type")
