@@ -1,4 +1,5 @@
 import streamlit as st
+import altair as alt
 import matplotlib.pyplot as plt
 import pandas as pd
 import numpy as np
@@ -17,12 +18,27 @@ st.write("This is a web app to visualize crime records in Israel.")
 # line plot for total TikimSum in each year, x axis is year, y axis is TikimSum
 st.subheader("Total Crime Records Each Year")
 # st.line_chart(sum_by_year[sum_by_year.index != 2023])
-summary_by_year = crimes_sum.groupby('Year')['TikimSum'].agg(['sum', 'mean'])
-plt.plot(summary_by_year.index, summary_by_year['sum'], label='Sum')
-plt.plot(summary_by_year.index, summary_by_year['mean'], label='Average')
-plt.xlabel('Year')
-plt.ylabel('Value')
-plt.legend()
-st.pyplot(plt)
+summary_by_year = crimes_sum.groupby('year')['TikimSum'].agg(['sum', 'mean']).reset_index()
+
+# Plotting
+st.title("Sum and Average of 'TikimSum' by Year (excluding 2023)")
+chart = alt.Chart(summary_by_year).mark_line().encode(
+    x='Year',
+    y='sum',
+    color=alt.value('blue'),
+    tooltip=['Year', 'sum']
+).properties(
+    width=600,
+    height=400
+)
+
+chart += alt.Chart(summary_by_year).mark_line().encode(
+    x='Year',
+    y='mean',
+    color=alt.value('red'),
+    tooltip=['Year', 'mean']
+)
+
+st.altair_chart(chart)
 
 # run the app with: streamlit run final_vis.py
