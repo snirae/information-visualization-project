@@ -35,7 +35,7 @@ st.subheader("Crime Records in Each Canton")
 st.write("The darker the color, the more crime records in that canton.")
 
 # Load the GeoJSON data for Israel cantons
-cantons_data = pdk.data.GeometryData('./data/map.geojson')
+cantons_data = pdk.data.GeometryData('https://raw.githubusercontent.com/snirae/information-visualization-project/main/data/map.geojson')
 
 # Choropleth map
 st.pydeck_chart(pdk.Deck(
