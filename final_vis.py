@@ -1,4 +1,5 @@
 import streamlit as st
+import pydeck as pdk
 import plotly.express as px
 import pandas as pd
 import numpy as np
@@ -28,9 +29,38 @@ with zipfile.ZipFile("./data/cr_r_q_ft.csv.zip", 'r') as zip_ref:
     csv = zip_ref.read('cr_r_q_ft.csv')
     crimes_det = pd.read_csv(io.BytesIO(csv), index_col=0)
 
-print(crimes_det.head())
+
+# choropleth map for crime records in each canton
+st.subheader("Crime Records in Each Canton")
+st.write("The darker the color, the more crime records in that canton.")
+
+# Load the GeoJSON data for Israel cantons
+cantons_data = pdk.data.GeometryData('./data/map.geojson')
+
+# Choropleth map
+st.pydeck_chart(pdk.Deck(
+    map_style='mapbox://styles/mapbox/light-v9',
+    initial_view_state=pdk.ViewState(
+        latitude=31.0461,
+        longitude=34.8516,
+        zoom=7,
+        pitch=0,
+    ),
+    layers=[
+        pdk.Layer(
+            'GeoJsonLayer',
+            cantons_data,
+            filled=True,
+            extruded=False,
+            get_fill_color='[255, 255, 255]',
+            get_line_color=[0, 0, 0],
+            line_width_min_pixels=1,
+        ),
+    ],
+))
+
+
 felony_type = crimes_det['StatisticCrimeGroup'].value_counts(normalize=True).sort_values(ascending=False)
-# combine all types with less than 5% into "other"
 felony_type = felony_type[0:5]
 felony_type['Other'] = 1 - felony_type.sum()
 
