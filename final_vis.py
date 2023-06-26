@@ -33,7 +33,6 @@ with zipfile.ZipFile("./data/cr_r_q_ft.csv.zip", 'r') as zip_ref:
 
 crimes_det["year"] = crimes_det['Quarter'].apply(lambda x: int(str(x).split("-")[0]) if not pd.isna(x) else x)
 crimes_det = crimes_det[crimes_det['year'] == 2022]
-crimes_det['TikimSum'] = crimes_det['TikimSum'].apply(lambda x: int(x.replace(',', '')) if not pd.isna(x) else x)
 crimes_det['district'] = crimes_det['PoliceDistrict'].apply(lambda x: x.split(" ")[-1] if not pd.isna(x) else x)
 crimes_det = crimes_det.groupby('district').agg({'TikimSum': 'sum', 'StatisticCrimeGroup': 'mode'}).reset_index()
 
