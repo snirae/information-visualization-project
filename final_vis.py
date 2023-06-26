@@ -39,8 +39,11 @@ st.write("The darker the color, the more crime records in that canton.")
 geojson_path = "data/map.geojson"
 gdf = gpd.read_file(geojson_path)
 
+# Create a dummy column for locations (assuming the GeoDataFrame has an "id" column)
+gdf["location"] = gdf["id"]
+
 # Create the Choropleth map using Plotly Express
-fig = px.choropleth(gdf, geojson=gdf.geometry, locations=gdf.index,
+fig = px.choropleth(gdf, geojson=gdf.geometry.__geo_interface__, locations="location",
                     color='value', color_continuous_scale="Viridis",
                     range_color=(0, 100), featureidkey="properties.id",
                     projection="mercator")
@@ -51,6 +54,8 @@ fig.update_layout(margin={"r": 0, "t": 0, "l": 0, "b": 0})
 
 # Display the Choropleth map using Streamlit
 st.plotly_chart(fig)
+
+
 
 felony_type = crimes_det['StatisticCrimeGroup'].value_counts(normalize=True).sort_values(ascending=False)
 felony_type = felony_type[0:5]
