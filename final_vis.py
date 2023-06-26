@@ -5,7 +5,8 @@ import pandas as pd
 import numpy as np
 import zipfile
 import io
-import geopandas as gpd
+import plotly.graph_objects as go
+import json
 
 
 # run the app with: streamlit run final_vis.py
@@ -30,31 +31,40 @@ with zipfile.ZipFile("./data/cr_r_q_ft.csv.zip", 'r') as zip_ref:
     csv = zip_ref.read('cr_r_q_ft.csv')
     crimes_det = pd.read_csv(io.BytesIO(csv), index_col=0)
 
+crimes_det["year"] = crimes_det['Quarter'].apply(lambda x: int(str(x).split("-")[0]) if not pd.isna(x) else x)
+crimes_det = crimes_det[crimes_det['year'] == 2022]
+crimes_det['TikimSum'] = crimes_det['TikimSum'].apply(lambda x: int(x.replace(',', '')) if not pd.isna(x) else x)
+crimes_det['district'] = crimes_det['PoliceDistrict'].apply(lambda x: x.split(" ")[-1] if not pd.isna(x) else x)
+crimes_det = crimes_det.groupby('district').agg({'TikimSum': 'sum', 'StatisticCrimeGroup': 'mode'}).reset_index()
 
 # choropleth map for crime records in each canton
 st.subheader("Crime Records in Each Canton")
 st.write("The darker the color, the more crime records in that canton.")
 
-# Read the GeoJSON file
 geojson_path = "data/map.geojson"
-gdf = gpd.read_file(geojson_path)
+with open(geojson_path) as f:
+    geo = json.load(f)
 
-# Create a dummy column for locations (assuming the GeoDataFrame has an "id" column)
-gdf["location"] = gdf["id"]
-
-# Create the Choropleth map using Plotly Express
-fig = px.choropleth(gdf, geojson=gdf.geometry.__geo_interface__, locations="location",
-                    color='value', color_continuous_scale="Viridis",
-                    range_color=(0, 100), featureidkey="properties.id",
-                    projection="mercator")
-
-# Customize the map layout
-fig.update_geos(fitbounds="locations", visible=False)
+fig = go.Figure(
+    go.Choroplethmapbox(
+        geojson=geo,
+        locations=crimes_det.district,
+        featureidkey="properties.heb_name",
+        z=crimes_det.TikimSum,
+        colorscale="sunsetdark",
+        marker_opacity=0.5,
+        marker_line_width=0,
+    )
+)
+fig.update_layout(
+    mapbox_style="carto-positron",
+    mapbox_zoom=6.6,
+    mapbox_center={"lat": 31.0461, "lon": 34.8516},
+    width=800,
+    height=600,
+)
 fig.update_layout(margin={"r": 0, "t": 0, "l": 0, "b": 0})
-
-# Display the Choropleth map using Streamlit
 st.plotly_chart(fig)
-
 
 
 felony_type = crimes_det['StatisticCrimeGroup'].value_counts(normalize=True).sort_values(ascending=False)
