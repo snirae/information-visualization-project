@@ -33,9 +33,9 @@ with zipfile.ZipFile("./data/cr_r_q_ft.csv.zip", 'r') as zip_ref:
     crimes_det = pd.read_csv(io.BytesIO(csv), index_col=0)
 
 crimes_det["year"] = crimes_det['Quarter'].apply(lambda x: int(str(x).split("-")[0]) if not pd.isna(x) else x)
-crimes_det = crimes_det[crimes_det['year'] == 2022]
-crimes_det['district'] = crimes_det['PoliceDistrict'].apply(lambda x: x.split(" ")[-1] if not pd.isna(x) else x)
-crimes_det = crimes_det.groupby('district').agg({'TikimSum': 'sum'}).reset_index()
+district = crimes_det[crimes_det['year'] == 2022]
+district['district'] = district['PoliceDistrict'].apply(lambda x: x.split(" ")[-1] if not pd.isna(x) else x)
+district = district.groupby('district').agg({'TikimSum': 'sum'}).reset_index()
 
 # choropleth map for crime records in each canton
 st.subheader("Crime Records in Each Canton")
@@ -48,9 +48,9 @@ with open(geojson_path) as f:
 fig = go.Figure(
     go.Choroplethmapbox(
         geojson=geo,
-        locations=crimes_det.district,
+        locations=district.district,
         featureidkey="properties.heb_name",
-        z=crimes_det.TikimSum,
+        z=district.TikimSum,
         colorscale="sunsetdark",
         marker_opacity=0.5,
         marker_line_width=0,
@@ -67,7 +67,8 @@ fig.update_layout(margin={"r": 0, "t": 0, "l": 0, "b": 0})
 st.plotly_chart(fig)
 
 
-felony_type = crimes_det['StatisticCrimeGroup'].value_counts(normalize=True).sort_values(ascending=False)
+
+felony_type = district['StatisticCrimeGroup'].value_counts(normalize=True).sort_values(ascending=False)
 felony_type = felony_type[0:5]
 felony_type['Other'] = 1 - felony_type.sum()
 
