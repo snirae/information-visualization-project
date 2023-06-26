@@ -5,6 +5,7 @@ import pandas as pd
 import numpy as np
 import zipfile
 import io
+import geopandas as gpd
 
 
 # run the app with: streamlit run final_vis.py
@@ -34,32 +35,22 @@ with zipfile.ZipFile("./data/cr_r_q_ft.csv.zip", 'r') as zip_ref:
 st.subheader("Crime Records in Each Canton")
 st.write("The darker the color, the more crime records in that canton.")
 
-# Load the GeoJSON data for Israel cantons
-url = 'https://raw.githubusercontent.com/snirae/information-visualization-project/main/data/map.geojson'
-cantons_data = pdk.io.read_geojson(url)
+# Read the GeoJSON file
+geojson_path = "data/map.geojson"
+gdf = gpd.read_file(geojson_path)
 
-# Choropleth map
-st.pydeck_chart(pdk.Deck(
-    map_style='mapbox://styles/mapbox/light-v9',
-    initial_view_state=pdk.ViewState(
-        latitude=31.0461,
-        longitude=34.8516,
-        zoom=7,
-        pitch=0,
-    ),
-    layers=[
-        pdk.Layer(
-            'GeoJsonLayer',
-            cantons_data,
-            filled=True,
-            extruded=False,
-            get_fill_color='[255, 255, 255]',
-            get_line_color=[0, 0, 0],
-            line_width_min_pixels=1,
-        ),
-    ],
-))
+# Create the Choropleth map using Plotly Express
+fig = px.choropleth(gdf, geojson=gdf.geometry, locations=gdf.index,
+                    color='value', color_continuous_scale="Viridis",
+                    range_color=(0, 100), featureidkey="properties.id",
+                    projection="mercator")
 
+# Customize the map layout
+fig.update_geos(fitbounds="locations", visible=False)
+fig.update_layout(margin={"r": 0, "t": 0, "l": 0, "b": 0})
+
+# Display the Choropleth map using Streamlit
+st.plotly_chart(fig)
 
 felony_type = crimes_det['StatisticCrimeGroup'].value_counts(normalize=True).sort_values(ascending=False)
 felony_type = felony_type[0:5]
