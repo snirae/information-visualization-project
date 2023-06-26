@@ -68,7 +68,7 @@ st.plotly_chart(fig)
 
 
 
-felony_type = district['StatisticCrimeGroup'].value_counts(normalize=True).sort_values(ascending=False)
+felony_type = crimes_det['StatisticCrimeGroup'].value_counts(normalize=True).sort_values(ascending=False)
 felony_type = felony_type[0:5]
 felony_type['Other'] = 1 - felony_type.sum()
 
