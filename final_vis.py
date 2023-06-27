@@ -18,17 +18,24 @@ crimes_sum["year"] = crimes_sum['Quarter'].apply(lambda x: int(str(x).split("-")
 crimes_sum['TikimSum'] = crimes_sum['TikimSum'].apply(lambda x: int(x.replace(',', '')) if not pd.isna(x) else x)
 
 sum_by_year = crimes_sum.groupby('year')['TikimSum'].sum().reset_index()
-
+sum_by_year["Year"] = sum_by_year["year"]
+sum_by_year['Total Crime Records'] = sum_by_year['TikimSum']
+sum_by_year = sum_by_year.drop(['year', 'TikimSum'], axis=1)
 
 st.header("Crime Records Visualization")
 st.write("This is an app to visualize crime records in Israel.")
 
 # line plot for total TikimSum in each year, x axis is year, y axis is TikimSum
 st.subheader("Total Crime Records Each Year")
-# st.line_chart(sum_by_year[sum_by_year.index != 2023])
-fig = px.line(sum_by_year[sum_by_year['year'] < 2023], x="year", y="TikimSum")
-fig.update_traces(mode="markers+lines")
+fig = px.line(sum_by_year[sum_by_year['Year'] < 2023], x="Year", y="Total Crime Records", title='Total Crime Records / Year')
+# fig.update_traces(line_color='red')
+fig.update_traces(marker=dict(size=12, line=dict(width=2, color='red')),
+                    selector=dict(mode='markers+lines'))
+# fig.update_traces(mode="markers+lines")
 st.plotly_chart(fig)
+
+
+########################################################################################################################
 
 
 with zipfile.ZipFile("./data/cr_r_q_ft.csv.zip", 'r') as zip_ref:
@@ -54,7 +61,7 @@ for row in district.iterrows():
     Population: {row[1]['population']:,}<br>
     Area: {row[1]['area']:,} km<sup>2</sup><br>
     Population density: {row[1]['density']:,} people/km<sup>2</sup><br>
-    <font color="blue"><b>Crime records per 100k people: {round(row[1]['crimes_per_100k'], 2):,}</b></font><br>
+    <b>Crime records per 100k people: {round(row[1]['crimes_per_100k'], 2):,}</b><br>
     Total crime records: {row[1]['TikimSum']:,}<br>
     Most common crime: {row[1]['StatisticCrimeGroup'][0][0]} (count: {row[1]['StatisticCrimeGroup'][1][0]:,})<br>
     """
@@ -95,6 +102,8 @@ fig.update_layout(margin={"r": 0, "t": 0, "l": 0, "b": 0})
 st.plotly_chart(fig)
 
 
+########################################################################################################################
+
 
 felony_type = crimes_det['StatisticCrimeGroup'].value_counts(normalize=True).sort_values(ascending=False)
 felony_type = felony_type[0:5]
@@ -105,4 +114,14 @@ st.subheader("Felony Type")
 st.write("The most common felony type is", felony_type.index[0], "with", round(felony_type[0]*100, 2), "% of all crimes.")
 
 fig = px.pie(crimes_det, values=felony_type.values, names=felony_type.index, title='Felony Type')
+fig.update_layout(
+    autosize=False,
+    width=600,
+    height=600,
+)
 st.plotly_chart(fig)
+
+
+########################################################################################################################
+
+
