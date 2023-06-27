@@ -139,28 +139,22 @@ df = sum_by_district_year.pivot(index='District', columns='year', values='TikimS
 df['Difference'] = (df[2022] - df[2018]) / df[2018] * 100
 df = df.sort_values(by='Difference', ascending=False)
 
-# Create a horizontal bar plot using Plotly Express
+# Create a horizontal bar plot
 fig = px.bar(df, x='Difference', y='District', orientation='h', color='Difference', 
              color_continuous_scale='RdBu_r', labels={'Difference': 'Crime Rate Difference'})
 
 # Add a line at y=0
 fig.add_shape(type='line', x0=0, x1=0, y0=-0.5, y1=len(df)-0.5, line=dict(color='black', width=2))
 
-# Customize the layout
 fig.update_layout(
     xaxis_title='Difference',
     yaxis_title='District',
-    # as higher values are worse, we want the colors to be red
-    # coloraxis_colorbar=dict(title='Difference', tickvals=[-50, 0, 50], ticktext=['-50%', '0%', '50%']),
     plot_bgcolor='white',
     paper_bgcolor='white',
     font_color='black',
-    # yaxis=dict(tickmode='array', tickvals=df.index, ticktext=df['District']),
     width=800,
     height=500,
     font_size=16,
 )
 
-
-# Show the horizontal bar plot
 st.plotly_chart(fig)
