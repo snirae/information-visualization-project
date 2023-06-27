@@ -195,7 +195,7 @@ fig.update_layout(
 )
 fig.update_layout(xaxis=dict(showgrid=True, gridwidth=0.5, gridcolor='LightPink'),
                   yaxis=dict(showgrid=True, gridwidth=0.5, gridcolor='LightPink'))
-fig.update_traces(line_color='blue')
+fig.update_traces(line_color='white')
 fig.update_traces(line=dict(width=3))
 fig.update_traces(mode="markers+lines")
 st.plotly_chart(fig)
