@@ -54,7 +54,7 @@ for row in district.iterrows():
     Population: {row[1]['population']:,}<br>
     Area: {row[1]['area']:,} km<sup>2</sup><br>
     Population density: {row[1]['density']:,} people/km<sup>2</sup><br>
-    <b>Crime records per 100k people: {round(row[1]['crimes_per_100k'], 2):,}</b><br>
+    <font color="blue"><b>Crime records per 100k people: {round(row[1]['crimes_per_100k'], 2):,}</b></font><br>
     Total crime records: {row[1]['TikimSum']:,}<br>
     Most common crime: {row[1]['StatisticCrimeGroup'][0][0]} (count: {row[1]['StatisticCrimeGroup'][1][0]:,})<br>
     """
