@@ -48,7 +48,7 @@ district['district'] = district['district'].apply(lambda x: 'מחוז ' + x)
 district['TikimSum'] = district['TikimSum'].apply(lambda x: 'Total crime records: ' + str(x))
 district['StatisticCrimeGroup'] = district['StatisticCrimeGroup'].apply(lambda x: 'Most common crime: ' + x[0])
 district['density'] = district['density'].apply(lambda x: 'Population density: ' + str(round(x, 2)))
-district['crimes_per_100k'] = district['crimes_per_100k'].apply(lambda x: 'Crime records per 100k people: ' + str(round(x, 2)))
+# district['crimes_per_100k'] = district['crimes_per_100k'].apply(lambda x: 'Crime records per 100k people: ' + str(round(x, 2)))
 district['area'] = district['area'].apply(lambda x: 'Area: ' + str(round(x, 2)))
 
 
@@ -65,7 +65,7 @@ fig = go.Figure(
         geojson=geo,
         locations=district.district,
         featureidkey="properties.heb_name",
-        z=district.crimes_per_100k.apply(lambda x: float(x.split(": ")[-1])),
+        z=district.crimes_per_100k,
         text=district[['population', 'area', 'density', 'TikimSum', 'StatisticCrimeGroup']],
         colorscale="sunsetdark",
         marker_opacity=0.5,
