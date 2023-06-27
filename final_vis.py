@@ -152,13 +152,13 @@ fig.update_layout(
     xaxis_title='Difference',
     yaxis_title='District',
     # as higher values are worse, we want the colors to be red
-    coloraxis_colorbar=dict(title='Difference', tickvals=[-50, 0, 50], ticktext=['-50%', '0%', '50%']),
+    # coloraxis_colorbar=dict(title='Difference', tickvals=[-50, 0, 50], ticktext=['-50%', '0%', '50%']),
     plot_bgcolor='white',
     paper_bgcolor='white',
     font_color='black',
     # yaxis=dict(tickmode='array', tickvals=df.index, ticktext=df['District']),
-    width=700,
-    height=500,
+    width=750,
+    font_size=18,
 )
 
 
