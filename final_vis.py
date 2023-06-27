@@ -27,6 +27,7 @@ sum_by_year = sum_by_year.drop(['year', 'TikimSum'], axis=1)
 # line plot for total TikimSum in each year, x axis is year, y axis is TikimSum
 st.subheader("Total Crime Records Each Year")
 fig = px.line(sum_by_year[sum_by_year['Year'] < 2023], x="Year", y="Total Crime Records")
+# layout opacity
 fig.update_layout(
     # plot_bgcolor='white',
     # xaxis=dict(
@@ -38,6 +39,7 @@ fig.update_layout(
     #     gridcolor='black',
     # ),
     font_size=18,
+    opacity=0.6,
 )
 fig.update_traces(line_color='red')
 fig.update_traces(line=dict(width=4))
