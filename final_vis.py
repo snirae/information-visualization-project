@@ -50,7 +50,21 @@ district['population'] = district['population'].apply(lambda x: 'Population: ' +
 district['density'] = district['density'].apply(lambda x: 'Population density: ' + str(round(x, 2)) + '\n')
 # district['crimes_per_100k'] = district['crimes_per_100k'].apply(lambda x: 'Crime records per 100k people: ' + str(round(x, 2)) + '\n')
 district['area'] = district['area'].apply(lambda x: 'Area: ' + str(round(x, 2)) + '\n')
-district['text'] = district['population'] + district['area'] + district['density'] + district['TikimSum'] + district['StatisticCrimeGroup']
+
+# texts for each district
+texts = []
+for row in district.iterrows():
+    text = f"""
+    District: {row[1]['district']}
+    {row[1]['population']}
+    {row[1]['area']}
+    {row[1]['density']}
+    {row[1]['TikimSum']}
+    {row[1]['StatisticCrimeGroup']}
+    """
+    texts.append(text)
+
+district['text'] = texts
 
 
 # choropleth map for crime records in each canton
