@@ -203,12 +203,12 @@ st.plotly_chart(fig)
 ########################################################################################################################
 
 # line plot for 2 chosen cities, that shows the crime records for each quarter in each year for comparison
-st.subheader("Crime Records in Each Quarter For 2 Chosen Cities")
+st.subheader("Comparison Between Crime Records in Two Cities")
 
 
 grouped_city = crimes_sum.groupby(['Settlement_Council', 'Quarter'])['TikimSum'].sum().reset_index()
-city1 = st.selectbox("Choose a city", grouped_city['Settlement_Council'].unique())
-city2 = st.selectbox("Choose another city", grouped_city['Settlement_Council'].unique())
+city1 = st.selectbox("Choose first city", grouped_city['Settlement_Council'].unique())
+city2 = st.selectbox("Choose second city", grouped_city['Settlement_Council'].unique())
 city1_df = grouped_city[grouped_city['Settlement_Council'] == city1]
 city2_df = grouped_city[grouped_city['Settlement_Council'] == city2]
 
