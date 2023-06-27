@@ -11,7 +11,9 @@ from scipy import stats
 
 
 # run the app with: streamlit run final_vis.py
+st.header("Crime Records Visualization")
 
+########################################################################################################################
 
 crimes_sum = pd.read_csv("./data/sum_cr_r_q.csv", index_col=0)
 crimes_sum["year"] = crimes_sum['Quarter'].apply(lambda x: int(str(x).split("-")[0]) if not pd.isna(x) else x)
@@ -22,12 +24,9 @@ sum_by_year["Year"] = sum_by_year["year"]
 sum_by_year['Total Crime Records'] = sum_by_year['TikimSum']
 sum_by_year = sum_by_year.drop(['year', 'TikimSum'], axis=1)
 
-st.header("Crime Records Visualization")
-st.write("This is an app to visualize crime records in Israel.")
-
 # line plot for total TikimSum in each year, x axis is year, y axis is TikimSum
 st.subheader("Total Crime Records Each Year")
-fig = px.line(sum_by_year[sum_by_year['Year'] < 2023], x="Year", y="Total Crime Records", title='Total Crime Records / Year')
+fig = px.line(sum_by_year[sum_by_year['Year'] < 2023], x="Year", y="Total Crime Records")
 fig.update_layout(
     plot_bgcolor='white',
     xaxis=dict(
@@ -41,6 +40,7 @@ fig.update_layout(
     font_size=20,
 )
 fig.update_traces(line_color='red')
+fig.update_traces(line=dict(width=4))
 fig.update_traces(mode="markers+lines")
 st.plotly_chart(fig)
 
