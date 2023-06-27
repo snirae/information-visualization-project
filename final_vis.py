@@ -15,6 +15,11 @@ st.header("Crime Records Visualization")
 
 ########################################################################################################################
 
+
+# line plot for total TikimSum in each year, x axis is year, y axis is TikimSum
+st.subheader("Total Crime Records Each Year")
+
+
 crimes_sum = pd.read_csv("./data/sum_cr_r_q.csv", index_col=0)
 crimes_sum["year"] = crimes_sum['Quarter'].apply(lambda x: int(str(x).split("-")[0]) if not pd.isna(x) else x)
 crimes_sum['TikimSum'] = crimes_sum['TikimSum'].apply(lambda x: int(x.replace(',', '')) if not pd.isna(x) else x)
@@ -24,8 +29,7 @@ sum_by_year["Year"] = sum_by_year["year"]
 sum_by_year['Total Crime Records'] = sum_by_year['TikimSum']
 sum_by_year = sum_by_year.drop(['year', 'TikimSum'], axis=1)
 
-# line plot for total TikimSum in each year, x axis is year, y axis is TikimSum
-st.subheader("Total Crime Records Each Year")
+
 fig = px.line(sum_by_year[sum_by_year['Year'] < 2023], x="Year", y="Total Crime Records")
 # change grid color
 fig.update_layout(font_size=18,
@@ -38,6 +42,11 @@ st.plotly_chart(fig)
 
 
 ########################################################################################################################
+
+
+# choropleth map for crime records in each canton
+st.subheader("Crime Records in Each District")
+st.write("The darker the color, the more crime records per 100k people in that district.")
 
 
 with zipfile.ZipFile("./data/cr_r_q_ft.csv.zip", 'r') as zip_ref:
@@ -72,10 +81,6 @@ for row in district.iterrows():
 district['text'] = texts
 
 
-# choropleth map for crime records in each canton
-st.subheader("Crime Records in Each District")
-st.write("The darker the color, the more crime records in that district.")
-
 geojson_path = "data/map.geojson"
 with open(geojson_path) as f:
     geo = json.load(f)
@@ -107,13 +112,15 @@ st.plotly_chart(fig)
 ########################################################################################################################
 
 
+# pie chart for felony type
+st.subheader("Felony Type")
+st.write("The most common felony type is", felony_type.index[0], "with", round(felony_type[0]*100, 2), "% of all crimes.")
+
+
 felony_type = crimes_det['StatisticCrimeGroup'].value_counts(normalize=True).sort_values(ascending=False)
 felony_type = felony_type[0:5]
 felony_type['Other'] = 1 - felony_type.sum()
 
-# pie chart for felony type
-st.subheader("Felony Type")
-st.write("The most common felony type is", felony_type.index[0], "with", round(felony_type[0]*100, 2), "% of all crimes.")
 
 fig = px.pie(crimes_det, values=felony_type.values, names=felony_type.index)
 fig.update_layout(
@@ -128,7 +135,10 @@ st.plotly_chart(fig)
 ########################################################################################################################
 
 
+# bar chart for diff in crime records in each district
 st.subheader("Crime Records Difference in Percentage For The Last 5 Years")
+st.write("The darker the bar, the higher the crime rate difference in %.")
+
 
 sum_by_district_year = crimes_sum.groupby(['PoliceDistrict', 'year'])['TikimSum'].sum().reset_index()
 sum_by_district_year['District'] = sum_by_district_year['PoliceDistrict']
