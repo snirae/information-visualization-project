@@ -141,14 +141,13 @@ df = df.sort_values(by='Difference', ascending=False)
 
 # Create a horizontal bar plot using Plotly Express
 fig = px.bar(df, x='Difference', y='District', orientation='h', color='Difference', 
-             color_continuous_scale='RdBu', labels={'Difference': 'Crime Rate Difference'})
+             color_continuous_scale='RdBu_r', labels={'Difference': 'Crime Rate Difference'})
 
 # Add a line at y=0
 fig.add_shape(type='line', x0=0, x1=0, y0=-0.5, y1=len(df)-0.5, line=dict(color='black', width=2))
 
 # Customize the layout
 fig.update_layout(
-    title='Crime Rate Difference by District',
     xaxis_title='Difference',
     yaxis_title='District',
     # as higher values are worse, we want the colors to be red
