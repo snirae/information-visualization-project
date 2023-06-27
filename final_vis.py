@@ -44,23 +44,24 @@ district = district.groupby('district').agg({'TikimSum': 'sum', 'StatisticCrimeG
 district = district.merge(districts, on='district')
 district['crimes_per_100k'] = district['TikimSum'] / (district['population'] / 100000)
 
-district['TikimSum'] = district['TikimSum'].apply(lambda x: 'Total crime records: ' + str(x) + '\n')
-district['StatisticCrimeGroup'] = district['StatisticCrimeGroup'].apply(lambda x: 'Most common crime: ' + x[0])
-district['population'] = district['population'].apply(lambda x: 'Population: ' + str(x) + '\n')
-district['density'] = district['density'].apply(lambda x: 'Population density: ' + str(round(x, 2)) + '\n')
+# district['TikimSum'] = district['TikimSum'].apply(lambda x: 'Total crime records: ' + str(x))
+# district['StatisticCrimeGroup'] = district['StatisticCrimeGroup'].apply(lambda x: 'Most common crime: ' + x[0])
+# district['population'] = district['population'].apply(lambda x: 'Population: ' + str(x))
+# district['density'] = district['density'].apply(lambda x: 'Population density: ' + str(round(x, 2)))
 # district['crimes_per_100k'] = district['crimes_per_100k'].apply(lambda x: 'Crime records per 100k people: ' + str(round(x, 2)) + '\n')
-district['area'] = district['area'].apply(lambda x: 'Area: ' + str(round(x, 2)) + '\n')
+# district['area'] = district['area'].apply(lambda x: 'Area: ' + str(round(x, 2)))
 
 # texts for each district
 texts = []
 for row in district.iterrows():
     text = f"""
-    District: {row[1]['district']}
-    {row[1]['population']}
-    {row[1]['area']}
-    {row[1]['density']}
-    {row[1]['TikimSum']}
-    {row[1]['StatisticCrimeGroup']}
+    District: {row[1]['district']}<br>
+    Population: {row[1]['population']}<br>
+    Area: {row[1]['area']}<br>
+    Population density: {row[1]['density']}<br>
+    Crime records per 100k people: {round(row[1]['crimes_per_100k'], 2)}<br>
+    Total crime records: {row[1]['TikimSum']}<br>
+    Most common crime: {row[1]['StatisticCrimeGroup']}<br>
     """
     texts.append(text)
 
