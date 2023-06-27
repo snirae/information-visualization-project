@@ -50,6 +50,7 @@ district['population'] = district['population'].apply(lambda x: 'Population: ' +
 district['density'] = district['density'].apply(lambda x: 'Population density: ' + str(round(x, 2)) + '\n')
 # district['crimes_per_100k'] = district['crimes_per_100k'].apply(lambda x: 'Crime records per 100k people: ' + str(round(x, 2)) + '\n')
 district['area'] = district['area'].apply(lambda x: 'Area: ' + str(round(x, 2)) + '\n')
+district['text'] = district['population'] + district['area'] + district['density'] + district['TikimSum'] + district['StatisticCrimeGroup']
 
 
 # choropleth map for crime records in each canton
@@ -66,7 +67,7 @@ fig = go.Figure(
         locations=district.district.apply(lambda x: x.split(" ")[-1]),
         featureidkey="properties.heb_name",
         z=district.crimes_per_100k,
-        text=district[['population', 'area', 'density', 'TikimSum', 'StatisticCrimeGroup']],
+        text=district.text,
         colorscale="sunsetdark",
         marker_opacity=0.5,
         marker_line_width=0,
@@ -75,7 +76,7 @@ fig = go.Figure(
 fig.update_layout(
     mapbox_style="carto-positron",
     mapbox_zoom=6.6,
-    mapbox_center={"lat": 31.0461, "lon": 34.8516},
+    mapbox_center={"lat": 31.0461, "lon": 34},
     width=800,
     height=600,
 )
