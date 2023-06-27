@@ -179,9 +179,9 @@ st.plotly_chart(fig)
 st.subheader("Crime Records in Each Quarter For A Chosen City")
 
 
-grouped_city = crimes_sum.groupby(['Settelment_Council', 'Quarter'])['TikimSum'].sum().reset_index()
-city = st.selectbox("Choose a city", grouped_city['Settelment_Council'].unique())
-city_df = grouped_city[grouped_city['Settelment_Council'] == city]
+grouped_city = crimes_sum.groupby(['Settlement_Council', 'Quarter'])['TikimSum'].sum().reset_index()
+city = st.selectbox("Choose a city", grouped_city['Settlement_Council'].unique())
+city_df = grouped_city[grouped_city['Settlement_Council'] == city]
 
 fig = px.line(city_df, x='Quarter', y='TikimSum', title=f"Crime Records in {city}")
 fig.update_layout(
