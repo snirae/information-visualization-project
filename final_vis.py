@@ -120,7 +120,7 @@ fig.update_layout(
     autosize=False,
     width=800,
     height=800,
-    font_size=20,
+    font_size=18,
 )
 st.plotly_chart(fig)
 
@@ -147,7 +147,7 @@ fig = px.bar(df, x='Difference', y='District', orientation='h', color='Differenc
 fig.add_shape(type='line', x0=0, x1=0, y0=-0.5, y1=len(df)-0.5, line=dict(color='black', width=2))
 
 fig.update_layout(
-    xaxis_title='Difference',
+    xaxis_title='Difference %',
     yaxis_title='District',
     plot_bgcolor='white',
     paper_bgcolor='white',
