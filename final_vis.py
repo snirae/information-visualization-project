@@ -35,7 +35,7 @@ with zipfile.ZipFile("./data/cr_r_q_ft.csv.zip", 'r') as zip_ref:
 crimes_det["year"] = crimes_det['Quarter'].apply(lambda x: int(str(x).split("-")[0]) if not pd.isna(x) else x)
 district = crimes_det[crimes_det['year'] == 2022]
 district['district'] = district['PoliceDistrict'].apply(lambda x: x.split(" ")[-1] if not pd.isna(x) else x)
-district = district.groupby('district').agg({'TikimSum': 'sum'}).reset_index()
+district = district.groupby('district').agg({'TikimSum': 'sum', 'StatisticCrimeGroup': stats.mode}).reset_index()
 
 # choropleth map for crime records in each canton
 st.subheader("Crime Records in Each Canton")
@@ -51,6 +51,7 @@ fig = go.Figure(
         locations=district.district,
         featureidkey="properties.heb_name",
         z=district.TikimSum,
+        text=district.StatisticCrimeGroup.apply(lambda x: x[0]),
         colorscale="sunsetdark",
         marker_opacity=0.5,
         marker_line_width=0,
