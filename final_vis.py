@@ -115,7 +115,7 @@ felony_type['Other'] = 1 - felony_type.sum()
 st.subheader("Felony Type")
 st.write("The most common felony type is", felony_type.index[0], "with", round(felony_type[0]*100, 2), "% of all crimes.")
 
-fig = px.pie(crimes_det, values=felony_type.values, names=felony_type.index, title='Felony Type')
+fig = px.pie(crimes_det, values=felony_type.values, names=felony_type.index)
 fig.update_layout(
     autosize=False,
     width=800,
@@ -128,3 +128,28 @@ st.plotly_chart(fig)
 ########################################################################################################################
 
 
+sum_by_district_year = crimes_sum.groupby(['PoliceDistrict', 'year'])['TikimSum'].sum().reset_index()
+sum_by_district_year['District'] = sum_by_district_year['PoliceDistrict']
+sum_by_district_year.dropna(inplace=True)
+
+# new df that shows the difference in percentage betweeen TikimSum in 2018 and 2022 for each district
+df = sum_by_district_year.pivot(index='district', columns='year', values='TikimSum').reset_index()
+df['Difference'] = (df[2022] - df[2018]) / df[2018] * 100
+df = df.sort_values(by='Difference', ascending=False)
+
+# Create a horizontal bar plot using Plotly Express
+fig = px.bar(df, x='Difference', y='District', orientation='h', color='Difference', 
+             color_continuous_scale='RdBu', labels={'Difference': 'Crime Rate Difference'})
+
+# Customize the layout
+fig.update_layout(
+    title='Crime Rate Difference by District',
+    xaxis_title='Difference',
+    yaxis_title='District',
+    coloraxis_colorbar=dict(title='Difference'),
+    plot_bgcolor='white',
+    paper_bgcolor='white'
+)
+
+# Show the horizontal bar plot
+st.plotly_chart(fig)
