@@ -156,9 +156,9 @@ fig.update_layout(
     plot_bgcolor='white',
     paper_bgcolor='white',
     font_color='black',
-    yaxis=dict(tickmode='array', tickvals=df.index, ticktext=df['District']),
-    width=800,
-    height=600,
+    # yaxis=dict(tickmode='array', tickvals=df.index, ticktext=df['District']),
+    width=700,
+    height=500,
 )
 
 
