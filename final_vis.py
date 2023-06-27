@@ -176,28 +176,28 @@ st.plotly_chart(fig)
 ########################################################################################################################
 
 
-# line plot for a chosen city, that shows the crime records for each quarter in each year
-st.subheader("Crime Records in Each Quarter For A Chosen City")
+# # line plot for a chosen city, that shows the crime records for each quarter in each year
+# st.subheader("Crime Records in Each Quarter For A Chosen City")
 
 
-grouped_city = crimes_sum.groupby(['Settlement_Council', 'Quarter'])['TikimSum'].sum().reset_index()
-city = st.selectbox("Choose a city", grouped_city['Settlement_Council'].unique())
-city_df = grouped_city[grouped_city['Settlement_Council'] == city]
+# grouped_city = crimes_sum.groupby(['Settlement_Council', 'Quarter'])['TikimSum'].sum().reset_index()
+# city = st.selectbox("Choose a city", grouped_city['Settlement_Council'].unique())
+# city_df = grouped_city[grouped_city['Settlement_Council'] == city]
 
-fig = px.line(city_df, x='Quarter', y='TikimSum', title=f"Crime Records in {city}")
-fig.update_layout(
-    xaxis_title='Quarter',
-    yaxis_title='Crime Records',
-    width=800,
-    height=500,
-    font_size=16,
-)
-fig.update_layout(xaxis=dict(showgrid=True, gridwidth=0.5, gridcolor='LightPink'),
-                  yaxis=dict(showgrid=True, gridwidth=0.5, gridcolor='LightPink'))
-fig.update_traces(line_color='white')
-fig.update_traces(line=dict(width=3))
-fig.update_traces(mode="markers+lines")
-st.plotly_chart(fig)
+# fig = px.line(city_df, x='Quarter', y='TikimSum', title=f"Crime Records in {city}")
+# fig.update_layout(
+#     xaxis_title='Quarter',
+#     yaxis_title='Crime Records',
+#     width=800,
+#     height=500,
+#     font_size=16,
+# )
+# fig.update_layout(xaxis=dict(showgrid=True, gridwidth=0.5, gridcolor='LightPink'),
+#                   yaxis=dict(showgrid=True, gridwidth=0.5, gridcolor='LightPink'))
+# fig.update_traces(line_color='white')
+# fig.update_traces(line=dict(width=3))
+# fig.update_traces(mode="markers+lines")
+# st.plotly_chart(fig)
 
 
 ########################################################################################################################
