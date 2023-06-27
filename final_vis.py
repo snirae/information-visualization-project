@@ -32,14 +32,29 @@ with zipfile.ZipFile("./data/cr_r_q_ft.csv.zip", 'r') as zip_ref:
     csv = zip_ref.read('cr_r_q_ft.csv')
     crimes_det = pd.read_csv(io.BytesIO(csv), index_col=0)
 
+districts = pd.read_csv("./data/districts.csv")
+districts['density'] = districts['population'] / districts['area']
+
+
 crimes_det["year"] = crimes_det['Quarter'].apply(lambda x: int(str(x).split("-")[0]) if not pd.isna(x) else x)
 district = crimes_det[crimes_det['year'] == 2022]
 district['district'] = district['PoliceDistrict'].apply(lambda x: x.split(" ")[-1] if not pd.isna(x) else x)
 district = district.groupby('district').agg({'TikimSum': 'sum', 'StatisticCrimeGroup': stats.mode}).reset_index()
 
+district = district.merge(districts, on='district')
+district['crimes_per_100k'] = district['TikimSum'] / (district['population'] / 100000)
+
+district['district'] = district['district'].apply(lambda x: 'מחוז ' + x)
+district['TikimSum'] = district['TikimSum'].apply(lambda x: 'Total crime records: ' + str(x))
+district['StatisticCrimeGroup'] = district['StatisticCrimeGroup'].apply(lambda x: 'Most common crime: ' + x[0])
+district['density'] = district['density'].apply(lambda x: 'Population density: ' + str(round(x, 2)))
+district['crimes_per_100k'] = district['crimes_per_100k'].apply(lambda x: 'Crime records per 100k people: ' + str(round(x, 2)))
+district['area'] = district['area'].apply(lambda x: 'Area: ' + str(round(x, 2)))
+
+
 # choropleth map for crime records in each canton
-st.subheader("Crime Records in Each Canton")
-st.write("The darker the color, the more crime records in that canton.")
+st.subheader("Crime Records in Each District")
+st.write("The darker the color, the more crime records in that district.")
 
 geojson_path = "data/map.geojson"
 with open(geojson_path) as f:
@@ -50,8 +65,8 @@ fig = go.Figure(
         geojson=geo,
         locations=district.district,
         featureidkey="properties.heb_name",
-        z=district.TikimSum,
-        text=district.StatisticCrimeGroup.apply(lambda x: x[0]),
+        z=district.crimes_per_100k.apply(lambda x: float(x.split(": ")[-1])),
+        text=district[['population', 'area', 'density', 'TikimSum', 'StatisticCrimeGroup']]
         colorscale="sunsetdark",
         marker_opacity=0.5,
         marker_line_width=0,
