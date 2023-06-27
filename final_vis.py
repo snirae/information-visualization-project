@@ -118,8 +118,8 @@ st.write("The most common felony type is", felony_type.index[0], "with", round(f
 fig = px.pie(crimes_det, values=felony_type.values, names=felony_type.index)
 fig.update_layout(
     autosize=False,
-    width=800,
-    height=800,
+    width=600,
+    height=600,
     font_size=18,
 )
 st.plotly_chart(fig)
