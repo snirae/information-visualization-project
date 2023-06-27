@@ -28,10 +28,8 @@ st.write("This is an app to visualize crime records in Israel.")
 # line plot for total TikimSum in each year, x axis is year, y axis is TikimSum
 st.subheader("Total Crime Records Each Year")
 fig = px.line(sum_by_year[sum_by_year['Year'] < 2023], x="Year", y="Total Crime Records", title='Total Crime Records / Year')
-# fig.update_traces(line_color='red')
-fig.update_traces(marker=dict(size=12, line=dict(width=2, color='red')),
-                    selector=dict(mode='markers+lines'))
-# fig.update_traces(mode="markers+lines")
+fig.update_traces(line_color='red')
+fig.update_traces(mode="markers+lines")
 st.plotly_chart(fig)
 
 
@@ -116,8 +114,9 @@ st.write("The most common felony type is", felony_type.index[0], "with", round(f
 fig = px.pie(crimes_det, values=felony_type.values, names=felony_type.index, title='Felony Type')
 fig.update_layout(
     autosize=False,
-    width=600,
-    height=600,
+    width=800,
+    height=800,
+    textsize=20,
 )
 st.plotly_chart(fig)
 
