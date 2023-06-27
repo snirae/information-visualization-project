@@ -114,12 +114,14 @@ st.plotly_chart(fig)
 
 # pie chart for felony type
 st.subheader("Felony Type")
-st.write("The most common felony type is", felony_type.index[0], "with", round(felony_type[0]*100, 2), "% of all crimes.")
 
 
 felony_type = crimes_det['StatisticCrimeGroup'].value_counts(normalize=True).sort_values(ascending=False)
 felony_type = felony_type[0:5]
 felony_type['Other'] = 1 - felony_type.sum()
+
+
+st.write("The most common felony type is", felony_type.index[0], "with", round(felony_type[0]*100, 2), "% of all crimes.")
 
 
 fig = px.pie(crimes_det, values=felony_type.values, names=felony_type.index)
