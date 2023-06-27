@@ -13,38 +13,11 @@ from scipy import stats
 # run the app with: streamlit run final_vis.py
 st.header("Crime Records Visualization")
 
-########################################################################################################################
-
-
-# line plot for total TikimSum in each year, x axis is year, y axis is TikimSum
-st.subheader("Total Crime Records Each Year")
-
-
-crimes_sum = pd.read_csv("./data/sum_cr_r_q.csv", index_col=0)
-crimes_sum["year"] = crimes_sum['Quarter'].apply(lambda x: int(str(x).split("-")[0]) if not pd.isna(x) else x)
-crimes_sum['TikimSum'] = crimes_sum['TikimSum'].apply(lambda x: int(x.replace(',', '')) if not pd.isna(x) else x)
-
-sum_by_year = crimes_sum.groupby('year')['TikimSum'].sum().reset_index()
-sum_by_year["Year"] = sum_by_year["year"]
-sum_by_year['Total Crime Records'] = sum_by_year['TikimSum']
-sum_by_year = sum_by_year.drop(['year', 'TikimSum'], axis=1)
-
-
-fig = px.line(sum_by_year[sum_by_year['Year'] < 2023], x="Year", y="Total Crime Records")
-# change grid color
-fig.update_layout(font_size=18,
-                  xaxis=dict(showgrid=True, gridwidth=0.5, gridcolor='LightPink'),
-                  yaxis=dict(showgrid=True, gridwidth=0.5, gridcolor='LightPink'))
-fig.update_traces(line_color='red')
-fig.update_traces(line=dict(width=3))
-fig.update_traces(mode="markers+lines")
-st.plotly_chart(fig)
-
 
 ########################################################################################################################
 
 
-# choropleth map for crime records in each canton
+# choropleth map for crime records in each district
 st.subheader("Crime Records in Each District")
 st.write("The darker the color, the more crime records per 100k people in that district.")
 
@@ -112,31 +85,6 @@ st.plotly_chart(fig)
 ########################################################################################################################
 
 
-# pie chart for felony type
-st.subheader("Felony Type")
-
-
-felony_type = crimes_det['StatisticCrimeGroup'].value_counts(normalize=True).sort_values(ascending=False)
-felony_type = felony_type[0:5]
-felony_type['Other'] = 1 - felony_type.sum()
-
-
-st.write("The most common felony type is", felony_type.index[0], "with", round(felony_type[0]*100, 2), "% of all crimes.")
-
-
-fig = px.pie(crimes_det, values=felony_type.values, names=felony_type.index)
-fig.update_layout(
-    autosize=False,
-    width=700,
-    height=700,
-    font_size=18,
-)
-st.plotly_chart(fig)
-
-
-########################################################################################################################
-
-
 # bar chart for diff in crime records in each district
 st.subheader("Crime Records Difference in Percentage For The Last 5 Years")
 st.write("The darker the bar, the higher the crime rate difference in %.")
@@ -175,7 +123,60 @@ st.plotly_chart(fig)
 ########################################################################################################################
 
 
-# plot a line for a chosen city, that shows the crime records for each quarter in each year
+# pie chart for felony type
+st.subheader("Felony Type")
+
+
+felony_type = crimes_det['StatisticCrimeGroup'].value_counts(normalize=True).sort_values(ascending=False)
+felony_type = felony_type[0:5]
+felony_type['Other'] = 1 - felony_type.sum()
+
+
+st.write("The most common felony type is", felony_type.index[0], "with", round(felony_type[0]*100, 2), "% of all crimes.")
+
+
+fig = px.pie(crimes_det, values=felony_type.values, names=felony_type.index)
+fig.update_layout(
+    autosize=False,
+    width=700,
+    height=700,
+    font_size=18,
+)
+st.plotly_chart(fig)
+
+
+########################################################################################################################
+
+
+# line plot for total TikimSum in each year, x axis is year, y axis is TikimSum
+st.subheader("Total Crime Records Each Year")
+
+
+crimes_sum = pd.read_csv("./data/sum_cr_r_q.csv", index_col=0)
+crimes_sum["year"] = crimes_sum['Quarter'].apply(lambda x: int(str(x).split("-")[0]) if not pd.isna(x) else x)
+crimes_sum['TikimSum'] = crimes_sum['TikimSum'].apply(lambda x: int(x.replace(',', '')) if not pd.isna(x) else x)
+
+sum_by_year = crimes_sum.groupby('year')['TikimSum'].sum().reset_index()
+sum_by_year["Year"] = sum_by_year["year"]
+sum_by_year['Total Crime Records'] = sum_by_year['TikimSum']
+sum_by_year = sum_by_year.drop(['year', 'TikimSum'], axis=1)
+
+
+fig = px.line(sum_by_year[sum_by_year['Year'] < 2023], x="Year", y="Total Crime Records")
+# change grid color
+fig.update_layout(font_size=18,
+                  xaxis=dict(showgrid=True, gridwidth=0.5, gridcolor='LightPink'),
+                  yaxis=dict(showgrid=True, gridwidth=0.5, gridcolor='LightPink'))
+fig.update_traces(line_color='red')
+fig.update_traces(line=dict(width=3))
+fig.update_traces(mode="markers+lines")
+st.plotly_chart(fig)
+
+
+########################################################################################################################
+
+
+# line plot for a chosen city, that shows the crime records for each quarter in each year
 st.subheader("Crime Records in Each Quarter For A Chosen City")
 
 
@@ -187,11 +188,13 @@ fig = px.line(city_df, x='Quarter', y='TikimSum', title=f"Crime Records in {city
 fig.update_layout(
     xaxis_title='Quarter',
     yaxis_title='Crime Records',
-    # plot_bgcolor='white',
-    # paper_bgcolor='white',
-    # font_color='black',
     width=800,
     height=500,
     font_size=16,
 )
+fig.update_layout(xaxis=dict(showgrid=True, gridwidth=0.5, gridcolor='LightPink'),
+                  yaxis=dict(showgrid=True, gridwidth=0.5, gridcolor='LightPink'))
+fig.update_traces(line_color='red')
+fig.update_traces(line=dict(width=3))
+fig.update_traces(mode="markers+lines")
 st.plotly_chart(fig)
