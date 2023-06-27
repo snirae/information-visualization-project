@@ -170,3 +170,28 @@ fig.update_layout(
 )
 
 st.plotly_chart(fig)
+
+
+########################################################################################################################
+
+
+# plot a line for a chosen city, that shows the crime records for each quarter in each year
+st.subheader("Crime Records in Each Quarter For A Chosen City")
+
+
+grouped_city = crimes_sum.groupby(['Settelment_Council', 'Quarter'])['TikimSum'].sum().reset_index()
+city = st.selectbox("Choose a city", grouped_city['Settelment_Council'].unique())
+city_df = grouped_city[grouped_city['Settelment_Council'] == city]
+
+fig = px.line(city_df, x='Quarter', y='TikimSum', title=f"Crime Records in {city}")
+fig.update_layout(
+    xaxis_title='Quarter',
+    yaxis_title='Crime Records',
+    # plot_bgcolor='white',
+    # paper_bgcolor='white',
+    # font_color='black',
+    width=800,
+    height=500,
+    font_size=16,
+)
+st.plotly_chart(fig)
