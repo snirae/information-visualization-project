@@ -28,6 +28,12 @@ st.write("This is an app to visualize crime records in Israel.")
 # line plot for total TikimSum in each year, x axis is year, y axis is TikimSum
 st.subheader("Total Crime Records Each Year")
 fig = px.line(sum_by_year[sum_by_year['Year'] < 2023], x="Year", y="Total Crime Records", title='Total Crime Records / Year')
+fig.update_layout(
+    plot_bgcolor='white',
+    paper_bgcolor='white',
+    font_color='black',
+    font_size=20,
+)
 fig.update_traces(line_color='red')
 fig.update_traces(mode="markers+lines")
 st.plotly_chart(fig)
@@ -116,7 +122,7 @@ fig.update_layout(
     autosize=False,
     width=800,
     height=800,
-    textsize=20,
+    font_size=20,
 )
 st.plotly_chart(fig)
 
