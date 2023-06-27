@@ -44,28 +44,26 @@ district = district.groupby('district').agg({'TikimSum': 'sum', 'StatisticCrimeG
 district = district.merge(districts, on='district')
 district['crimes_per_100k'] = district['TikimSum'] / (district['population'] / 100000)
 
-# district['TikimSum'] = district['TikimSum'].apply(lambda x: 'Total crime records: ' + str(x))
-# district['StatisticCrimeGroup'] = district['StatisticCrimeGroup'].apply(lambda x: 'Most common crime: ' + x[0])
-# district['population'] = district['population'].apply(lambda x: 'Population: ' + str(x))
-# district['density'] = district['density'].apply(lambda x: 'Population density: ' + str(round(x, 2)))
-# district['crimes_per_100k'] = district['crimes_per_100k'].apply(lambda x: 'Crime records per 100k people: ' + str(round(x, 2)) + '\n')
-# district['area'] = district['area'].apply(lambda x: 'Area: ' + str(round(x, 2)))
+district['text'] = 'District: ' + district['district'] + '<br>Population ' + (district['population']).astype(str) + '<br>Area '
++ (district['area']).astype(str) + '<br>Population density ' + (district['density']).astype(str) + '<br><b>Crime records per 100k people '
++ (district['crimes_per_100k']).astype(str) + '</b><br>Total crime records ' + (district['TikimSum']).astype(str) + '<br>Most common crime '
++ district['StatisticCrimeGroup'].apply(lambda x: x[0]).astype(str) + ' (count: ' + district['StatisticCrimeGroup'].apply(lambda x: x[1]).astype(str) + ')'
 
 # texts for each district
-texts = []
-for row in district.iterrows():
-    text = f"""
-    District: {row[1]['district']}<br>
-    Population: {row[1]['population']}<br>
-    Area: {row[1]['area']}<br>
-    Population density: {row[1]['density']}<br>
-    Crime records per 100k people: {round(row[1]['crimes_per_100k'], 2)}<br>
-    Total crime records: {row[1]['TikimSum']}<br>
-    Most common crime: {row[1]['StatisticCrimeGroup']}<br>
-    """
-    texts.append(text)
+# texts = []
+# for row in district.iterrows():
+#     text = f"""
+#     District: {row[1]['district']}<br>
+#     Population: {row[1]['population']}<br>
+#     Area: {row[1]['area']}<br>
+#     Population density: {row[1]['density']}<br>
+#     Crime records per 100k people: {round(row[1]['crimes_per_100k'], 2)}<br>
+#     Total crime records: {row[1]['TikimSum']}<br>
+#     Most common crime: {row[1]['StatisticCrimeGroup']}<br>
+#     """
+#     texts.append(text)
 
-district['text'] = texts
+# district['text'] = texts
 
 
 # choropleth map for crime records in each canton
@@ -83,6 +81,7 @@ fig = go.Figure(
         featureidkey="properties.heb_name",
         z=district.crimes_per_100k,
         text=district.text,
+        hovertemplate='%{text}',
         colorscale="sunsetdark",
         marker_opacity=0.5,
         marker_line_width=0,
