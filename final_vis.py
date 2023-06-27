@@ -25,7 +25,10 @@ st.write("This is an app to visualize crime records in Israel.")
 
 # line plot for total TikimSum in each year, x axis is year, y axis is TikimSum
 st.subheader("Total Crime Records Each Year")
-st.line_chart(sum_by_year[sum_by_year.index != 2023])
+# st.line_chart(sum_by_year[sum_by_year.index != 2023])
+fig = px.line(sum_by_year[sum_by_year['year'] < 2023], x="year", y="TikimSum")
+fig.update_traces(mode="markers+lines")
+st.plotly_chart(fig)
 
 
 with zipfile.ZipFile("./data/cr_r_q_ft.csv.zip", 'r') as zip_ref:
@@ -54,7 +57,7 @@ for row in district.iterrows():
     Population density: {row[1]['density']}<br>
     <b>Crime records per 100k people: {round(row[1]['crimes_per_100k'], 2)}</b><br>
     Total crime records: {row[1]['TikimSum']}<br>
-    Most common crime: {row[1]['StatisticCrimeGroup'][0]} (count: {row[1]['StatisticCrimeGroup'][1]})
+    Most common crime: {row[1]['StatisticCrimeGroup'][0][0]} (count: {row[1]['StatisticCrimeGroup'][1][0]})
     """
     texts.append(text)
 
@@ -76,7 +79,7 @@ fig = go.Figure(
         featureidkey="properties.heb_name",
         z=district.crimes_per_100k,
         text=district.text,
-        hovertemplate='%{text}',
+        # hovertemplate='%{text}',
         colorscale="sunsetdark",
         marker_opacity=0.5,
         marker_line_width=0,
