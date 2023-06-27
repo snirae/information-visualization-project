@@ -198,3 +198,38 @@ fig.update_traces(line_color='white')
 fig.update_traces(line=dict(width=3))
 fig.update_traces(mode="markers+lines")
 st.plotly_chart(fig)
+
+
+########################################################################################################################
+
+# line plot for 2 chosen cities, that shows the crime records for each quarter in each year for comparison
+st.subheader("Crime Records in Each Quarter For 2 Chosen Cities")
+
+
+grouped_city = crimes_sum.groupby(['Settlement_Council', 'Quarter'])['TikimSum'].sum().reset_index()
+city1 = st.selectbox("Choose a city", grouped_city['Settlement_Council'].unique())
+city2 = st.selectbox("Choose another city", grouped_city['Settlement_Council'].unique())
+city1_df = grouped_city[grouped_city['Settlement_Council'] == city1]
+city2_df = grouped_city[grouped_city['Settlement_Council'] == city2]
+
+fig = go.Figure()
+fig.add_trace(go.Scatter(x=city1_df['Quarter'], y=city1_df['TikimSum'],
+                    mode='lines+markers',
+                    name=city1))
+fig.add_trace(go.Scatter(x=city2_df['Quarter'], y=city2_df['TikimSum'],
+                    mode='lines+markers',
+                    name=city2))
+
+fig.update_layout(
+    xaxis_title='Quarter',
+    yaxis_title='Crime Records',
+    width=800,
+    height=500,
+    font_size=16,
+)
+fig.update_layout(xaxis=dict(showgrid=True, gridwidth=0.5, gridcolor='LightPink'),
+                    yaxis=dict(showgrid=True, gridwidth=0.5, gridcolor='LightPink'))
+fig.update_traces(line_color='white')
+fig.update_traces(line=dict(width=3))
+fig.update_traces(mode="markers+lines")
+st.plotly_chart(fig)
