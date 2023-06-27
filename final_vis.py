@@ -47,17 +47,16 @@ district = district.groupby('district').agg({'TikimSum': 'sum', 'StatisticCrimeG
 district = district.merge(districts, on='district')
 district['crimes_per_100k'] = district['TikimSum'] / (district['population'] / 100000)
 
-# texts for each district
 texts = []
 for row in district.iterrows():
     text = f"""
     District: {row[1]['district']}<br>
-    Population: {row[1]['population']}<br>
-    Area: {row[1]['area']}<br>
-    Population density: {row[1]['density']}<br>
-    <b>Crime records per 100k people: {round(row[1]['crimes_per_100k'], 2)}</b><br>
-    Total crime records: {row[1]['TikimSum']}<br>
-    Most common crime: {row[1]['StatisticCrimeGroup'][0][0]} (count: {row[1]['StatisticCrimeGroup'][1][0]})
+    Population: {row[1]['population']:,}<br>
+    Area: {row[1]['area']:,} km<sup>2</sup><br>
+    Population density: {row[1]['density']:,} people/km<sup>2</sup><br>
+    <b>Crime records per 100k people: {round(row[1]['crimes_per_100k'], 2):,}</b><br>
+    Total crime records: {row[1]['TikimSum']:,}<br>
+    Most common crime: {row[1]['StatisticCrimeGroup'][0][0]} (count: {row[1]['StatisticCrimeGroup'][1][0]:,})<br>
     """
     texts.append(text)
 
