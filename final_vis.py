@@ -76,7 +76,7 @@ fig = go.Figure(
 fig.update_layout(
     mapbox_style="carto-positron",
     mapbox_zoom=6.6,
-    mapbox_center={"lat": 31.0461, "lon": 34},
+    mapbox_center={"lat": 31, "lon": 34.8516},
     width=800,
     height=600,
 )
