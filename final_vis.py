@@ -215,12 +215,12 @@ city2_df = grouped_city[grouped_city['Settlement_Council'] == city2]
 fig = go.Figure()
 fig.add_trace(go.Scatter(x=city1_df['Quarter'], y=city1_df['TikimSum'],
                     mode='lines+markers',
-                    name=city1),
-                    color='red')
+                    name=city1,
+                    line=dict(color='firebrick', width=3))
 fig.add_trace(go.Scatter(x=city2_df['Quarter'], y=city2_df['TikimSum'],
                     mode='lines+markers',
-                    name=city2),
-                    color='blue')
+                    name=city2,
+                    line=dict(color='royalblue', width=3)))
 
 fig.update_layout(
     xaxis_title='Quarter',
@@ -231,6 +231,4 @@ fig.update_layout(
 )
 fig.update_layout(xaxis=dict(showgrid=True, gridwidth=0.5, gridcolor='LightPink'),
                     yaxis=dict(showgrid=True, gridwidth=0.5, gridcolor='LightPink'))
-fig.update_traces(line=dict(width=3))
-fig.update_traces(mode="markers+lines")
 st.plotly_chart(fig)
