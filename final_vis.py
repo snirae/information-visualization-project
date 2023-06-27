@@ -128,6 +128,8 @@ st.plotly_chart(fig)
 ########################################################################################################################
 
 
+st.subheader("Crime Records Difference in Percentage For The Last 5 Years")
+
 sum_by_district_year = crimes_sum.groupby(['PoliceDistrict', 'year'])['TikimSum'].sum().reset_index()
 sum_by_district_year['District'] = sum_by_district_year['PoliceDistrict']
 sum_by_district_year.dropna(inplace=True)
@@ -141,6 +143,9 @@ df = df.sort_values(by='Difference', ascending=False)
 fig = px.bar(df, x='Difference', y='District', orientation='h', color='Difference', 
              color_continuous_scale='RdBu', labels={'Difference': 'Crime Rate Difference'})
 
+# Add a line at y=0
+fig.add_shape(type='line', x0=0, x1=0, y0=-0.5, y1=len(df)-0.5, line=dict(color='black', width=1))
+
 # Customize the layout
 fig.update_layout(
     title='Crime Rate Difference by District',
@@ -148,8 +153,13 @@ fig.update_layout(
     yaxis_title='District',
     coloraxis_colorbar=dict(title='Difference'),
     plot_bgcolor='white',
-    paper_bgcolor='white'
+    paper_bgcolor='white',
+    font_color='black',
+    # district name on the bars
+    # annotations=[dict(x=0, y=i, text=df['District'][i], showarrow=False) for i in range(len(df))],
+    yaxis=dict(tickmode='array', tickvals=df.index, ticktext=df['District'])
 )
+
 
 # Show the horizontal bar plot
 st.plotly_chart(fig)
