@@ -157,8 +157,9 @@ fig.update_layout(
     paper_bgcolor='white',
     font_color='black',
     # yaxis=dict(tickmode='array', tickvals=df.index, ticktext=df['District']),
-    width=750,
-    font_size=18,
+    width=800,
+    height=500,
+    font_size=16,
 )
 
 
