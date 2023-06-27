@@ -216,7 +216,7 @@ fig = go.Figure()
 fig.add_trace(go.Scatter(x=city1_df['Quarter'], y=city1_df['TikimSum'],
                     mode='lines+markers',
                     name=city1,
-                    line=dict(color='firebrick', width=3))
+                    line=dict(color='firebrick', width=3)))
 fig.add_trace(go.Scatter(x=city2_df['Quarter'], y=city2_df['TikimSum'],
                     mode='lines+markers',
                     name=city2,
