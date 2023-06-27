@@ -144,20 +144,21 @@ fig = px.bar(df, x='Difference', y='District', orientation='h', color='Differenc
              color_continuous_scale='RdBu', labels={'Difference': 'Crime Rate Difference'})
 
 # Add a line at y=0
-fig.add_shape(type='line', x0=0, x1=0, y0=-0.5, y1=len(df)-0.5, line=dict(color='black', width=1))
+fig.add_shape(type='line', x0=0, x1=0, y0=-0.5, y1=len(df)-0.5, line=dict(color='black', width=2))
 
 # Customize the layout
 fig.update_layout(
     title='Crime Rate Difference by District',
     xaxis_title='Difference',
     yaxis_title='District',
-    coloraxis_colorbar=dict(title='Difference'),
+    # as higher values are worse, we want the colors to be red
+    coloraxis_colorbar=dict(title='Difference', tickvals=[-50, 0, 50], ticktext=['-50%', '0%', '50%']),
     plot_bgcolor='white',
     paper_bgcolor='white',
     font_color='black',
-    # district name on the bars
-    # annotations=[dict(x=0, y=i, text=df['District'][i], showarrow=False) for i in range(len(df))],
-    yaxis=dict(tickmode='array', tickvals=df.index, ticktext=df['District'])
+    yaxis=dict(tickmode='array', tickvals=df.index, ticktext=df['District']),
+    width=800,
+    height=600,
 )
 
 
