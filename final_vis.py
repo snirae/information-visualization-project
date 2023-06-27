@@ -28,16 +28,16 @@ sum_by_year = sum_by_year.drop(['year', 'TikimSum'], axis=1)
 st.subheader("Total Crime Records Each Year")
 fig = px.line(sum_by_year[sum_by_year['Year'] < 2023], x="Year", y="Total Crime Records")
 fig.update_layout(
-    plot_bgcolor='white',
-    xaxis=dict(
-        showgrid=True,
-        gridcolor='black',
-    ),
-    yaxis=dict(
-        showgrid=True,
-        gridcolor='black',
-    ),
-    font_size=20,
+    # plot_bgcolor='white',
+    # xaxis=dict(
+    #     showgrid=True,
+    #     gridcolor='black',
+    # ),
+    # yaxis=dict(
+    #     showgrid=True,
+    #     gridcolor='black',
+    # ),
+    font_size=18,
 )
 fig.update_traces(line_color='red')
 fig.update_traces(line=dict(width=4))
