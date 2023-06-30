@@ -61,7 +61,7 @@ for row in district.iterrows():
     <b>Crime records per 100k people: {round(row[1]['crimes_per_100k'], 2):,}</b><br>
     Total crime records: {row[1]['TikimSum']:,}<br>
     Most common crime: {row[1]['StatisticCrimeGroup'][0][0]} (count: {row[1]['StatisticCrimeGroup'][1][0]:,})<br>
-    Difference in crime records between 2018 and 2022: {round(df[df['District'] == row[1]['district']]['Difference'].values[0], 2)}%<br>
+    Difference in crime records between 2018 and 2022: {round(df[row[1]['district']]['Difference'].values[0], 2)}%<br>
     """
     texts.append(text)
 
