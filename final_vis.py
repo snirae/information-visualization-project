@@ -102,7 +102,7 @@ sum_by_district_year.dropna(inplace=True)
 # new df that shows the difference in percentage betweeen TikimSum in 2018 and 2022 for each district
 df = sum_by_district_year.pivot(index='District', columns='year', values='TikimSum').reset_index()
 df['Difference'] = (df[2022] - df[2018]) / df[2018] * 100
-df = df.sort_values(by='Difference', ascending=False)
+df = df.sort_values(by='Difference', ascending=True)
 
 # Create a horizontal bar plot
 fig = px.bar(df, x='Difference', y='District', orientation='h', color='Difference', 
