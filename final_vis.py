@@ -1,8 +1,6 @@
 import streamlit as st
-import pydeck as pdk
 import plotly.express as px
 import pandas as pd
-import numpy as np
 import zipfile
 import io
 import plotly.graph_objects as go
