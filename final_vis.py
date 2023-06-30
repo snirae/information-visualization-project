@@ -44,7 +44,7 @@ district = district.merge(districts, on='district')
 district['crimes_per_100k'] = district['TikimSum'] / (district['population'] / 100000)
 
 sum_by_district_year = crimes_sum.groupby(['PoliceDistrict', 'year'])['TikimSum'].sum().reset_index()
-sum_by_district_year['District'] = sum_by_district_year['PoliceDistrict']
+sum_by_district_year['District'] = sum_by_district_year['PoliceDistrict'].apply(lambda x: x.split(" ")[-1] if not pd.isna(x) else x)
 sum_by_district_year.dropna(inplace=True)
 
 # new df that shows the difference in percentage betweeen TikimSum in 2018 and 2022 for each district
