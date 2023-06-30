@@ -47,9 +47,10 @@ sum_by_district_year = crimes_sum.groupby(['PoliceDistrict', 'year'])['TikimSum'
 sum_by_district_year['District'] = sum_by_district_year['PoliceDistrict'].apply(lambda x: x.split(" ")[-1] if not pd.isna(x) else x)
 sum_by_district_year.dropna(inplace=True)
 
-# new df that shows the difference in percentage betweeen TikimSum in 2018 and 2022 for each district
+# insert to district df the difference in crime records between 2018 and 2022
 df = sum_by_district_year.pivot(index='District', columns='year', values='TikimSum').reset_index()
 df['Difference'] = (df[2022] - df[2018]) / df[2018] * 100
+district = district.merge(df[['District', 'Difference']], on='District')
 
 texts = []
 for row in district.iterrows():
@@ -61,7 +62,7 @@ for row in district.iterrows():
     <b>Crime records per 100k people: {round(row[1]['crimes_per_100k'], 2):,}</b><br>
     Total crime records: {row[1]['TikimSum']:,}<br>
     Most common crime: {row[1]['StatisticCrimeGroup'][0][0]} (count: {row[1]['StatisticCrimeGroup'][1][0]:,})<br>
-    Difference in crime records between 2018 and 2022: {round(df[row[1]['district']]['Difference'].values[0], 2)}%<br>
+    Difference in crime records between 2018 and 2022: {round(row[1]['Difference'], 2):,}%<br>
     """
     texts.append(text)
 
