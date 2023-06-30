@@ -50,7 +50,12 @@ sum_by_district_year.dropna(inplace=True)
 # insert to district df the difference in crime records between 2018 and 2022
 df = sum_by_district_year.pivot(index='District', columns='year', values='TikimSum').reset_index()
 df['Difference'] = (df[2022] - df[2018]) / df[2018] * 100
-district = district.merge(df[['District', 'Difference']], on='District')
+
+diff = []
+for row in district.iterrows():
+    diff.append(df[df['District'] == row[1]['district']]['Difference'].values[0])
+
+district['Difference'] = diff
 
 texts = []
 for row in district.iterrows():
