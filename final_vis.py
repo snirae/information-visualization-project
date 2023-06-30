@@ -105,44 +105,6 @@ st.plotly_chart(fig)
 ########################################################################################################################
 
 
-# # bar chart for diff in crime records in each district
-# st.subheader("Crime Records Difference in Percentage For The Last 5 Years")
-# st.write("The darker the bar, the higher the crime rate difference in %.")
-
-
-# sum_by_district_year = crimes_sum.groupby(['PoliceDistrict', 'year'])['TikimSum'].sum().reset_index()
-# sum_by_district_year['District'] = sum_by_district_year['PoliceDistrict']
-# sum_by_district_year.dropna(inplace=True)
-
-# # new df that shows the difference in percentage betweeen TikimSum in 2018 and 2022 for each district
-# df = sum_by_district_year.pivot(index='District', columns='year', values='TikimSum').reset_index()
-# df['Difference'] = (df[2022] - df[2018]) / df[2018] * 100
-# df = df.sort_values(by='Difference', ascending=True)
-
-# # Create a horizontal bar plot
-# fig = px.bar(df, x='Difference', y='District', orientation='h', color='Difference', 
-#              color_continuous_scale='RdBu_r', labels={'Difference': 'Crime Rate Difference'})
-
-# # Add a line at y=0
-# fig.add_shape(type='line', x0=0, x1=0, y0=-0.5, y1=len(df)-0.5, line=dict(color='black', width=2))
-
-# fig.update_layout(
-#     xaxis_title='Difference %',
-#     yaxis_title='District',
-#     plot_bgcolor='white',
-#     paper_bgcolor='white',
-#     font_color='black',
-#     width=800,
-#     height=500,
-#     font_size=16,
-# )
-
-# st.plotly_chart(fig)
-
-
-########################################################################################################################
-
-
 # pie chart for felony type
 st.subheader("Felony Type")
 
